@@ -1,0 +1,97 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Calender.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="using:Schedule.Models"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
+        x:Class="Calender.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="avares://Calender/Assets/icon.ico"
+        Title="Мой Календарь"
+        Width="650" Height="450"
+        WindowStartupLocation="CenterScreen"
+        ExtendClientAreaToDecorationsHint="True">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Window.Styles>
+        <Style Selector="Button">
+            <Setter Property="Background" Value="#3b82f6" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="15, 10" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#2563eb" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+        <Style Selector="TextBlock.h1">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#60a5fa" />
+            <Setter Property="Margin" Value="0,0,0,20" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+    </Window.Styles>
+
+    <Grid>
+
+        <Image Source="/Assets/bg.jpg"
+               Stretch="UniformToFill" />
+
+        <Border Background="#111111" Opacity="0.7" />
+
+        <Border Padding="30">
+            <StackPanel Spacing="20" VerticalAlignment="Center">
+
+                <TextBlock Classes="h1" Text="Загрузка расписания" />
+
+                <StackPanel>
+                    <TextBlock Text="Преподаватель:" Margin="0,0,0,5" Foreground="LightGray" />
+                    <AutoCompleteBox ItemsSource="{Binding AllTeachers}"
+                                     SelectedItem="{Binding SelectedTeacher}"
+                                     ValueMemberBinding="{Binding FullName, DataType=models:Teacher}"
+                                     FilterMode="Contains"
+                                     MinimumPrefixLength="0"
+                                     Watermark="Введите ФИО преподавателя"
+                                     CornerRadius="5" />
+                </StackPanel>
+
+                <Grid ColumnDefinitions="*, 15, *">
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="С какого:" Margin="0,0,0,5" Foreground="LightGray" />
+                        <DatePicker SelectedDate="{Binding StartDate}" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="По какое:" Margin="0,0,0,5" Foreground="LightGray" />
+                        <DatePicker SelectedDate="{Binding EndDate}" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                </Grid>
+
+                <Button Command="{Binding SyncCommand}"
+                        Content="ЗАПУСТИТЬ СИНХРОНИЗАЦИЮ"
+                        HorizontalAlignment="Stretch"
+                        FontSize="16"
+                        Height="50" />
+
+                <Border Background="#2d2d2d"
+                        CornerRadius="8"
+                        Padding="15"
+                        Height="80"
+                        Opacity="0.8">
+                    <ScrollViewer>
+                        <TextBlock Text="{Binding StatusText}"
+                                   TextWrapping="Wrap"
+                                   Foreground="#d1d5db" />
+                    </ScrollViewer>
+                </Border>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
